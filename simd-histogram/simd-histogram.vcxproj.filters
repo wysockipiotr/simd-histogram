@@ -5,13 +5,10 @@
     <ClCompile Include="MainWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ChannelPixels.cpp">
+    <ClCompile Include="MainWidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Histogram.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CalculationStrategy.cpp">
+    <ClCompile Include="HistogramsWidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -41,6 +38,9 @@
     <QtMoc Include="MainWindow.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="MainWidget.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="MainWindow.qrc">
@@ -51,16 +51,16 @@
     <ResourceCompile Include="simd-histogram.rc" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Channel.h">
+    <ClInclude Include="HistogramsWidget.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ChannelPixels.h">
+    <ClInclude Include="Shared.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Histogram.h">
+    <ClInclude Include="AlignedAllocator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CalculationStrategy.h">
+    <ClInclude Include="MessageProvider.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

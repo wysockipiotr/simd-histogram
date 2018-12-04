@@ -60,6 +60,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -116,10 +117,9 @@
     </QtRcc>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="CalculationStrategy.cpp" />
-    <ClCompile Include="ChannelPixels.cpp" />
-    <ClCompile Include="Histogram.cpp" />
+    <ClCompile Include="HistogramsWidget.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MainWidget.cpp" />
     <ClCompile Include="MainWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -132,10 +132,16 @@
     <ResourceCompile Include="simd-histogram.rc" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CalculationStrategy.h" />
-    <ClInclude Include="Channel.h" />
-    <ClInclude Include="ChannelPixels.h" />
-    <ClInclude Include="Histogram.h" />
+    <ClInclude Include="AlignedAllocator.h" />
+    <ClInclude Include="HistogramsWidget.h" />
+    <ClInclude Include="MessageProvider.h" />
+    <ClInclude Include="Shared.h" />
+    <QtMoc Include="MainWidget.h">
+      <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles;.;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName)\.;$(QTDIR)\include\QtCharts;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtWidgets</IncludePath>
+      <Define Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">UNICODE;_UNICODE;WIN32;WIN64;QT_DLL;QT_CHARTS_LIB;QT_CORE_LIB;QT_GUI_LIB;QT_WIDGETS_LIB</Define>
+      <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles;.;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName)\.;$(QTDIR)\include\QtCharts;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtWidgets</IncludePath>
+      <Define Condition="'$(Configuration)|$(Platform)'=='Release|x64'">UNICODE;_UNICODE;WIN32;WIN64;QT_DLL;QT_NO_DEBUG;NDEBUG;QT_CHARTS_LIB;QT_CORE_LIB;QT_GUI_LIB;QT_WIDGETS_LIB</Define>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <MASM Include="AsmCalculateHistogram.asm" />

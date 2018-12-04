@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QtWidgets/QMainWindow>
+#include "MainWidget.h"
 
 class MainWindow : public QMainWindow
 {
@@ -9,4 +10,6 @@ class MainWindow : public QMainWindow
 public:
 	MainWindow(QWidget *parent = Q_NULLPTR);
 
+private:
+	MainWidget * widget;
 };

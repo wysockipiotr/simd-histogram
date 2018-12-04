@@ -1,1 +1,0 @@
-#include "CalculationStrategy.h"

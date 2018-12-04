@@ -1,18 +1,20 @@
 #include "MainWindow.h"
-#include "ChannelPixels.h"
-#include "Histogram.h"
 #include <QDialog>
 #include <QStatusBar>
+#include <QDesktopWidget>
+#include <QStyle>
 
 MainWindow::MainWindow(QWidget *parent)
 	: QMainWindow(parent)
 {
-	Histogram histogram{};
-	ChannelPixels pixels{};
-	pixels.load_image();
-	histogram.use_asm(true);
-	
-	auto status{ new QStatusBar{this} };
-	status->showMessage(QString{ (histogram.calculate(pixels) ? "TAK" : "NIE") });
-	this->setStatusBar(status);
+	// set initial window size
+	this->resize(QDesktopWidget().availableGeometry(this).size() * 0.7);
+
+	auto status_bar{ new QStatusBar{this} };
+	this->setStatusBar(status_bar);
+	status_bar->showMessage(QString{ "No image" });
+
+	this->widget = new MainWidget{ std::make_shared<StatusBarMessageProvider>(status_bar), this };
+	setCentralWidget(this->widget);
+		
 }
