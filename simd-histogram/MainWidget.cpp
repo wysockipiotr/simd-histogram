@@ -9,6 +9,7 @@
 #include <QGroupBox>
 #include <QLabel>
 #include <QMessageBox>
+#include <QtConcurrent/QtConcurrent>
 
 #include <execution>
 #include <optional>
@@ -112,6 +113,32 @@ void MainWidget::build_layout() {
 void MainWidget::connect_signals() {
 	connect(this->load_image_btn, SIGNAL(pressed()), this, SLOT(load_image()));
 	connect(this->generate_histogram_btn, SIGNAL(pressed()), this, SLOT(calc_histograms()));
+	connect(&pixel_buffers_watcher, SIGNAL(finished()), this, SLOT(pixel_buffers_loaded()));
+	connect(&histograms_watcher, SIGNAL(finished()), this, SLOT(histograms_calculated()));
+}
+
+void MainWidget::pixel_buffers_loaded()
+{
+	pixel_buffers = std::make_optional(pixel_buffers_watcher.result());
+	this->image_label->setVisible(true);
+	this->message_provider->show_message(QString{ "Image loaded successfully" },0);
+	this->generate_histogram_btn->setEnabled(true);
+	this->load_image_btn->setEnabled(true);
+}
+
+void MainWidget::histograms_calculated()
+{
+	auto histograms{ histograms_watcher.result() };
+	if (histograms) {
+		// std::chrono::duration<double, std::ratio<1, 1000>> millis{ stop - start };
+		// this->message_provider->show_message(QString{ "Histograms calculated successfully in " } +QString::number(millis.count()) + QString{ " ms." }, 5'000);
+		this->histograms_widget->plot(*histograms);
+	} else {
+		QMessageBox msg_box{ QMessageBox::NoIcon, QString{"Error"}, QString{"Histogram calculation has failed."}, QMessageBox::Ok, this };
+		msg_box.exec();
+	}
+	this->load_image_btn->setEnabled(true);
+	this->generate_histogram_btn->setEnabled(true);
 }
 
 void MainWidget::load_image() {
@@ -127,14 +154,16 @@ void MainWidget::load_image() {
 		if (!image.isNull()) {
 			image = image.convertToFormat(QImage::Format_RGB32);
 
-			this->pixel_buffers = std::make_optional(load_channels_from_image(image));
+			const auto fetch = QtConcurrent::run(load_channels_from_image, image);
+			pixel_buffers_watcher.setFuture(fetch);
+			
+			this->image_label->setVisible(false);
 			this->image_label->setPixmap(QPixmap::fromImage(image.scaled(400, 400, Qt::AspectRatioMode::KeepAspectRatio)));
-
-			this->generate_histogram_btn->setEnabled(true);
-			this->message_provider->show_message(QString{"Image loaded successfully"}, 5'000);
+			//this->pixel_buffers = std::make_optional(load_channels_from_image(image));
+			
 		}
 	}
-	this->load_image_btn->setEnabled(true);
+	// this->load_image_btn->setEnabled(true);
 }
 
 void MainWidget::calc_histograms() {
@@ -142,26 +171,15 @@ void MainWidget::calc_histograms() {
 		this->generate_histogram_btn->setEnabled(false);
 
 		if (this->pixel_buffers) {
-			auto start{ std::chrono::high_resolution_clock::now() };
-			auto histograms { calculate_all(calculation_policy::cpp, *this->pixel_buffers) };
-			auto stop{ std::chrono::high_resolution_clock::now() };
+			//auto start{ std::chrono::high_resolution_clock::now() };
+			histograms_watcher.setFuture(QtConcurrent::run(calculate_all, calculation_policy::cpp, *this->pixel_buffers));
 
-			if (histograms)
-			{
-				std::chrono::duration<double, std::ratio<1,1000>> millis{ stop - start };
-				this->message_provider->show_message(QString{"Histograms calculated successfully in "} + QString::number(millis.count()) + QString{ " ms." }, 5'000);
-				this->histograms_widget->plot(*histograms);
-			} else
-			{
-				QMessageBox msg_box{ QMessageBox::NoIcon, QString{"Error"}, QString{"Loading pixels from image has failed."}, QMessageBox::Ok, this };
-				msg_box.exec();
-			}
+			//auto histograms { calculate_all(calculation_policy::cpp, *this->pixel_buffers) };
+			//auto stop{ std::chrono::high_resolution_clock::now() };
 
-		} else
-		{
-			QMessageBox msg_box{ QMessageBox::NoIcon, QString{"Error"}, QString{"Histogram calculation has failed."}, QMessageBox::Ok, this };
+		} else {
+			QMessageBox msg_box{ QMessageBox::NoIcon, QString{"Error"}, QString{"Loading pixels from image has failed."}, QMessageBox::Ok, this };
 			msg_box.exec();
 		}
 
-		this->generate_histogram_btn->setEnabled(true);
 }

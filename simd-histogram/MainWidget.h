@@ -3,7 +3,9 @@
 #include <array>
 #include "Shared.h"
 #include <optional>
+#include <QFutureWatcher>
 #include "MessageProvider.h"
+#include <QObject>
 
 class QPushButton;
 class HistogramsWidget;
@@ -21,6 +23,10 @@ private slots:
 
 	void calc_histograms();
 
+	void pixel_buffers_loaded();
+
+	void histograms_calculated();
+
 private:
 	void build_layout();
 
@@ -32,6 +38,11 @@ private:
 	QLabel *				image_label {};
 
 	MessageProvider			message_provider;
+
+	QFutureWatcher<std::array<pixel_buffer_t, 4>> pixel_buffers_watcher;
+	QFutureWatcher<std::optional<std::array<histogram_t, 4>>> histograms_watcher;
+
+	//QFuture<std::array<pixel_buffer_t, 4>> pixel_buffers_fetch;
 
 	std::optional<std::array<pixel_buffer_t, 4>> pixel_buffers { std::nullopt };
 };
