@@ -1,0 +1,2 @@
+LIBRARY "DLLASM"
+EXPORTS ExampleExport

@@ -39,10 +39,8 @@ private:
 
 	MessageProvider			message_provider;
 
-	QFutureWatcher<std::array<pixel_buffer_t, 4>> pixel_buffers_watcher;
-	QFutureWatcher<std::optional<std::array<histogram_t, 4>>> histograms_watcher;
+	QFutureWatcher<std::array<pixel_buffer_t, 4>>				pixel_buffers_watcher;
+	QFutureWatcher<std::optional<std::array<histogram_t, 4>>>	histograms_watcher;
 
-	//QFuture<std::array<pixel_buffer_t, 4>> pixel_buffers_fetch;
-
-	std::optional<std::array<pixel_buffer_t, 4>> pixel_buffers { std::nullopt };
+	std::optional<std::array<pixel_buffer_t, 4>>				pixel_buffers { std::nullopt };
 };

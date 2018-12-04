@@ -3,6 +3,7 @@
 #include <QStatusBar>
 #include <QDesktopWidget>
 #include <QStyle>
+#include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent)
 	: QMainWindow(parent)
