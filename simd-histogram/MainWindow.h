@@ -1,15 +1,15 @@
 #pragma once
 
 #include <QtWidgets/QMainWindow>
+
 #include "MainWidget.h"
 
-class MainWindow : public QMainWindow
-{
-	Q_OBJECT
+class MainWindow : public QMainWindow {
+Q_OBJECT
 
 public:
-	MainWindow(QWidget *parent = Q_NULLPTR);
+	explicit MainWindow(QWidget* parent = Q_NULLPTR);
 
 private:
-	MainWidget * widget;
+	MainWidget* widget;
 };

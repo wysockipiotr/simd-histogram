@@ -1,24 +1,26 @@
 #pragma once
-#include <QWidget>
-#include <unordered_map>
-#include "Shared.h"
-#include <array>
 
-namespace QtCharts
-{
-	class QChartView;
-	class QChart;
-}
+#include <QWidget>
+#include <array>
+#include <unordered_map>
+
+#include "Shared.h"
+
+namespace QtCharts {
+class QChartView;
+class QChart;
+}  // namespace QtCharts
+
+using chart_bundle_t = std::array<QtCharts::QChartView*, 4>;
 
 class HistogramsWidget : public QWidget {
-public:
-	HistogramsWidget(QWidget * parent = Q_NULLPTR);
+ public:
+  explicit HistogramsWidget(QWidget* parent = Q_NULLPTR);
 
-	void plot(const std::array<histogram_t, 4> & histograms);
+  void plot(const histogram_bundle_t& histograms);
 
-private:
-	void plot_channel(std::size_t ch, const histogram_t & histogram);
+ private:
+  void plot_channel(channel::index ch, const histogram_t& histogram);
 
-	std::array<QtCharts::QChartView *, 4> chart_views;
+  chart_bundle_t chart_views;
 };
-
