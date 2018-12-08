@@ -128,9 +128,6 @@ void MainWidget::build_layout() {
 	        {
 		        this->histograms_widget->clear();
 		        this->policy = cpp_strategy_radio->isChecked() ? calculation_policy::cpp : calculation_policy::assembly;
-		        QMessageBox::information(this, "Alert",
-		                                 "Strategy: " +
-		                                 QString(this->policy == calculation_policy::cpp ? "cpp" : "asm"));
 	        });
 }
 
@@ -153,11 +150,7 @@ void MainWidget::pixel_buffers_loaded() {
 
 void MainWidget::histograms_calculated() {
 	auto histograms{histograms_watcher.result()};
-	if (histograms) {
-		// std::chrono::duration<double, std::ratio<1, 1000>> millis{ stop - start };
-		// this->message_provider->show_message(QString{ "Histograms calculated successfully in " } +QString::number(millis.count()) + QString{ " ms." }, 5'000);
-		this->histograms_widget->plot(*histograms);
-	}
+	if (histograms) { this->histograms_widget->plot(*histograms); }
 	else {
 		QMessageBox msg_box{
 			QMessageBox::NoIcon, QString{"Error"}, QString{"Histogram calculation has failed."}, QMessageBox::Ok, this

@@ -33,7 +33,8 @@
 ;						xmm_a -- contains 16 pixels data
 ;						xmm_b -- copy of xmm_a
 ;
-;	OPERATION			simultaneously constructs two partial histograms from 16 pixels (bytes)
+;	OPERATION			
+;						simultaneously constructs two partial histograms from 16 pixels (bytes)
 ;
 ;	PLATFORM			
 ;						MASM x86-64
@@ -83,17 +84,19 @@ endm
 ;						_asm_calculate_histogram
 ;
 ;	CPP DECLARATION		
-;						extern "C" bool _asm_calculate_histogram(unsigned __int32* histogram, 
-;																 unsigned __int8* pixel_buffer,  
-;																 unsigned __int32 number_of_pixels);
+;						extern "C" bool _asm_calculate_histogram(
+;						unsigned __int32* histogram, 
+;						unsigned __int8* pixel_buffer,  
+;						unsigned __int32 number_of_pixels
+;						);
 ;
 ;	PARAMS				
 ;						histogram -- pointer to 256-byte histogram array, 
 ;						pixel_buffer -- pointer to buffer of pixel values
 ;						number_of_pixels -- total number of pixels in pixel_buffer
 ;
-;	OPERATION			
-;						creates histogram from 8-bit pixel buffer (one channel of rgb image)  
+;	OPERATION
+;						creates histogram from 8-bit pixel buffer (one channel of rgb image)
 ;
 ;	MODIFIED REGISTERS	
 ;						TODO
@@ -109,23 +112,34 @@ endm
 ; ---------------------------------------------------------------------------------------------------------------
 _asm_calculate_histogram proc frame
 
-		; -----------------------
-		push rbp				;
-		.pushreg rbp			;
-		push rbx				;
-		.pushreg rbx			;
-		push rsi				;	procedure prolog
-		.pushreg rsi			;	prepares suitable stack frame
-		push rdi				;	
-		.pushreg rdi			;	- nonvolatile registers are pushed onto stack
-								;	- 1024 bytes (256 x 4 bytes) of local memory 
-		sub rsp, 1032			;	   are reserved for auxiliary histogram buffer
-		.allocstack 1032		;	- RSP has to be 16-bytes aligned: 1032 = 1024 (histogram space) + 8 (padding)
-		mov rbp, rsp			;	
-		.setframe rbp, 0		;
-								;
-		.endprolog				;
-		; -----------------------
+		;
+		;	procedure prolog
+		;	prepares suitable stack frame
+		;
+		;	- nonvolatile registers are pushed onto stack
+		;	- 1024 bytes (256 x 4 bytes) of local memory 
+		;	  are reserved for auxiliary histogram buffer
+		;	- RSP has to be 16-bytes aligned: 1032 = 1024 (histogram space) + 8 (padding)
+		;
+
+		; ----------------------- ;
+		push rbp
+		.pushreg rbp
+		push rbx
+		.pushreg rbx
+		push rsi
+		.pushreg rsi
+		push rdi
+		.pushreg rdi
+
+		sub rsp, 1032
+		.allocstack 1032
+		mov rbp, rsp
+		.setframe rbp, 0
+
+		.endprolog
+		; ----------------------- ;
+
 
 		; store number of pixels (r10) and pixel buffer pointer (r11) 
 		; for further processing (of remaining [1, 31] pixels)
@@ -150,9 +164,9 @@ _asm_calculate_histogram proc frame
 
 ; Make sure num_pixels is valid
 		test r8d,r8d
-		jz Error                           ;jump if num_pixels is zero
+		jz Error
 		cmp r8d, [MAX_NUMBER_OF_PIXELS]
-		ja Error                            ;jump if num_pixels too big
+		ja Error
 
 
 ; zero-initialize both main and auxiliary histogram buffers
@@ -290,17 +304,20 @@ Ok:		; set success return value (true)
 
 Return: 
 
-		; -------------------------------
-		lea rsp, [rbp+1032]				;
-		pop rdi							;	procedure epilog
-		pop rsi							;	dump stack frame
-		pop rbx							;	
-		pop rbp							;
-		; -------------------------------
+		; procedure epilog 
+		; dump stack frame
+		
+		; ------------------- ;
+		lea rsp, [rbp+1032]
+		pop rdi			
+		pop rsi			
+		pop rbx			
+		pop rbp			
+		; ------------------- ;
 		
 		ret
 
-Error:  ; set failure return value (false)
+Error:	; set failure return value (false)
 		xor rax,rax
 		jmp Return
 
