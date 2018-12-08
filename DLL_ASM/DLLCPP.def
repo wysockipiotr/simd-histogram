@@ -1,0 +1,2 @@
+LIBRARY "DLLCPP"
+EXPORTS _cpp_calculate_histogram

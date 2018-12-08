@@ -37,13 +37,13 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="DLLASM.def">
-      <Filter>Pliki nagłówkowe</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <MASM Include="AsmCalculateHistogram.asm">
       <Filter>Pliki źródłowe</Filter>
     </MASM>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="DLLASM.def">
+      <Filter>Pliki nagłówkowe</Filter>
+    </None>
   </ItemGroup>
 </Project>

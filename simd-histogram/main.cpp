@@ -4,8 +4,8 @@
 #include <QLibrary>
 #include <QMessageBox>
 
-inline dll_histogram::function AsmCalculateHistogram = nullptr;
-inline dll_histogram::function CppCalculateHistogram = nullptr;
+// inline dll_histogram::function AsmCalculateHistogram = nullptr;
+// inline dll_histogram::function CppCalculateHistogram = nullptr;
 
 bool load_dlls();
 
@@ -43,19 +43,20 @@ int main(int argc, char* argv[]) {
 
 bool load_dlls() {
 	QLibrary asm_dll{dll_histogram::asm_library_name};
-	//QLibrary cpp_dll{dll_histogram::cpp_function_name};
+	QLibrary cpp_dll{dll_histogram::cpp_library_name};
 
 	asm_dll.load();
-	//cpp_dll.load();
+	cpp_dll.load();
 
-	if (asm_dll.isLoaded()) {
+	if (cpp_dll.isLoaded() ) {
 		dll_histogram::_asm_calculate_histogram =
 			reinterpret_cast<dll_histogram::function>(
 				asm_dll.resolve(dll_histogram::asm_function_name));
-		// dll_histogram::_cpp_calculate_histogram =
-		// 	reinterpret_cast<dll_histogram::function>(
-		// 		asm_dll.resolve(dll_histogram::cpp_function_name));
+
+		dll_histogram::_cpp_calculate_histogram =
+			reinterpret_cast<dll_histogram::function>(
+				cpp_dll.resolve(dll_histogram::cpp_function_name));
 	}
 
-	return (dll_histogram::_asm_calculate_histogram);
+	return ((dll_histogram::_cpp_calculate_histogram != nullptr) && (dll_histogram::_asm_calculate_histogram != nullptr));
 }
