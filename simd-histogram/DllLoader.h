@@ -1,7 +1,7 @@
 #include <Shared.h>
 
 namespace dll_histogram {
-	using function = bool (*)(histogram_entry_t* , pixel_t*, unsigned __int32);
+	using function = bool (*)(histogram_entry_t* , const pixel_t*, unsigned __int32);
 
 	inline function _asm_calculate_histogram = nullptr;
 	inline function _cpp_calculate_histogram = nullptr;

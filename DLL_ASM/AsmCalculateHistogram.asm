@@ -1,11 +1,14 @@
 ; ---------------------------------------------------------------------------------------------------------------
 ;
-;	LIBRARY				DLL_ASM
+;	LIBRARY				
+;						DLL_ASM
 ;
-;	DESCRIPTION			DLL_ASM provides accelerated SIMD approach to image histogram calculation.
+;	DESCRIPTION			
+;						DLL_ASM provides accelerated SIMD approach to image histogram calculation.
 ;						Library consists of one exported function (_asm_calculate_histogram).
 ;						
-;	PLATFORM			MASM x86-64
+;	PLATFORM			
+;						MASM x86-64
 ;						SSE
 ;
 ; ---------------------------------------------------------------------------------------------------------------
@@ -18,18 +21,22 @@
 
 ; ---------------------------------------------------------------------------------------------------------------
 ;
-;	MACRO				_process_16_pixels_using xmm_a xmm_b
+;	MACRO				
+;						_process_16_pixels_using xmm_a xmm_b
 ;
-;	PARAMS				xmm_a, xmm_b -- non-volatile XMM registers 
+;	PARAMS				
+;						xmm_a, xmm_b -- non-volatile XMM registers 
 ;
-;	REGISTER CONTENT	RSI -- pointer to main histogram
+;	REGISTER CONTENT	
+;						RSI -- pointer to main histogram
 ;						RDI -- pointer to auxiliary histogram
 ;						xmm_a -- contains 16 pixels data
 ;						xmm_b -- copy of xmm_a
 ;
 ;	OPERATION			simultaneously constructs two partial histograms from 16 pixels (bytes)
 ;
-;	PLATFORM			MASM x86-64
+;	PLATFORM			
+;						MASM x86-64
 ;						SSE
 ;
 ; ---------------------------------------------------------------------------------------------------------------
@@ -72,24 +79,31 @@ endm
 
 ; ---------------------------------------------------------------------------------------------------------------
 ;
-;	PROCEDURE			_asm_calculate_histogram
+;	PROCEDURE			
+;						_asm_calculate_histogram
 ;
-;	CPP DECLARATION		extern "C" bool _asm_calculate_histogram(unsigned __int32* histogram, 
+;	CPP DECLARATION		
+;						extern "C" bool _asm_calculate_histogram(unsigned __int32* histogram, 
 ;																 unsigned __int8* pixel_buffer,  
 ;																 unsigned __int32 number_of_pixels);
 ;
-;	PARAMS				histogram -- pointer to 256-byte histogram array, 
+;	PARAMS				
+;						histogram -- pointer to 256-byte histogram array, 
 ;						pixel_buffer -- pointer to buffer of pixel values
 ;						number_of_pixels -- total number of pixels in pixel_buffer
 ;
-;	OPERATION			creates histogram from 8-bit pixel buffer (one channel of rgb image)  
+;	OPERATION			
+;						creates histogram from 8-bit pixel buffer (one channel of rgb image)  
 ;
-;	MODIFIED REGISTERS	TODO
+;	MODIFIED REGISTERS	
+;						TODO
 ;
-;	PLATFORM			MASM x86-64
+;	PLATFORM			
+;						MASM x86-64
 ;						SSE
 ;
-;	RETURNS				true -- histogram calculation successful 
+;	RETURNS				
+;						true -- histogram calculation successful 
 ;						false -- invalid number_of_pixels or alignment 
 ;
 ; ---------------------------------------------------------------------------------------------------------------
@@ -121,50 +135,50 @@ _asm_calculate_histogram proc frame
 		; validate alignment of histogram and pixel buffer
 
 		; rsi points to main histogram
-        mov rsi,rcx                    
+		mov rsi,rcx                    
 		
 		; histogram is properly aligned if its address MOD 16 = 0
-        test rsi,15
-        jnz Error                          
+		test rsi,15
+		jnz Error                          
 
 		; r9 points to pixel buffer
-        mov r9,rdx
+		mov r9,rdx
 
 		; pixel buffer is properly aligned if its address MOD 16 = 0
-        test r9,15
-        jnz Error
+		test r9,15
+		jnz Error
 
 ; Make sure num_pixels is valid
-        test r8d,r8d
-        jz Error                           ;jump if num_pixels is zero
-        cmp r8d, [MAX_NUMBER_OF_PIXELS]
-        ja Error                            ;jump if num_pixels too big
-        
+		test r8d,r8d
+		jz Error                           ;jump if num_pixels is zero
+		cmp r8d, [MAX_NUMBER_OF_PIXELS]
+		ja Error                            ;jump if num_pixels too big
+
 
 ; zero-initialize both main and auxiliary histogram buffers
-        xor rax,rax
+		xor rax,rax
 
 		; rdi points to main histogram buffer
-        mov rdi,rsi                  
+		mov rdi,rsi                  
 		
 		; 128 * 8 (bytes in quadword) = 1024 bytes (size of histogram)
-        mov rcx,128    
+		mov rcx,128    
 		
 		; zeros
-        rep stosq                           
+		rep stosq                           
 
 
 		; rdi points to auxiliary histogram buffer
-        mov rdi,rbp          
+		mov rdi,rbp          
 		
 		; 128 * 8 (bytes in quadword) = 1024 bytes (size of histogram)
-        mov rcx,128  
+		mov rcx,128  
 		
 		; zeros
-        rep stosq                   
+		rep stosq                   
 		
 		
-; if total number of pixels < 32, jump to instructions processing remaining [0-31] pixels 
+; if total number of pixels < 32, jump to instructions processing remaining [0-31] pixels
 		mov rax,r10
 		cmp rax,32
 		jb Residue
@@ -173,13 +187,13 @@ _asm_calculate_histogram proc frame
 ; process all 32-pixel chunks of pixel buffer
 
 		; total number of pixels / 32 = number of 32-pixel chunks 
-        shr r8d,5 
+		shr r8d,5 
 
 		; rdi points to auxiliary histogram 
-        mov rdi,rbp                       
+		mov rdi,rbp                       
 
 		; jump destination alignment
-        align 16                            
+		align 16                            
 		
 ProcessNext:	
 		; load first 16 of 32 pixels (bytes) 
@@ -187,8 +201,8 @@ ProcessNext:
 		movdqa xmm1,xmm0
 
 		; load second 16 of 32 pixels (bytes)
-        movdqa xmm2,[r9+16]                 
-        movdqa xmm3,xmm2
+		movdqa xmm2,[r9+16]                 
+		movdqa xmm3,xmm2
 
 
 		; process pixels 0..15
@@ -199,42 +213,42 @@ ProcessNext:
 
 
 		; move pixel buffer pointer by 32 (so it points to next 32-pixel chunk)
-        add r9,32      
+		add r9,32      
 		
 		; loop while there are any 32-pixel chunks
 		;dec r8
-        sub r8,1
-        jnz ProcessNext                              
+		sub r8,1
+		jnz ProcessNext                              
 
 		
 ; combine main and auxiliary histograms
 
 		; set number of necessary iterations (32 * 8 histogram entries = 256 entries (the whole histogram)) 
-        mov ecx,32							
+		mov ecx,32							
 
-        xor rax,rax
+		xor rax,rax
 
-MergeNext:     
+MergeNext:
 		; xmm0:xmm1 contains main histogram 8-entries chunk
 		movdqa xmm0,xmmword ptr [rsi+rax]
-        movdqa xmm1,xmmword ptr [rsi+rax+16]
+		movdqa xmm1,xmmword ptr [rsi+rax+16]
 
 		; add auxiliary histogram chunk to main histogram chunk
-        paddd xmm0,xmmword ptr [rdi+rax]        
-        paddd xmm1,xmmword ptr [rdi+rax+16]
+		paddd xmm0,xmmword ptr [rdi+rax]        
+		paddd xmm1,xmmword ptr [rdi+rax+16]
 
 		; store result under destination address
-        movdqa xmmword ptr [rsi+rax],xmm0 
-        movdqa xmmword ptr [rsi+rax+16],xmm1
+		movdqa xmmword ptr [rsi+rax],xmm0 
+		movdqa xmmword ptr [rsi+rax+16],xmm1
 
 		; advance xmmword ptr for next chunk processing
-        add rax,32
+		add rax,32
 
 		; decrement iteration counter
-        sub ecx,1
+		sub ecx,1
 
 		; loop until the whole histogram is merged
-        jnz MergeNext
+		jnz MergeNext
 
 ; Process remaining [0-31] pixels, which were skipped by the foregoing SSE instruction block
 Residue:
@@ -271,7 +285,7 @@ ProcessNextRemaining:
 		jmp ProcessNextRemaining
 
 
-Ok:	    ; set success return value (true)
+Ok:		; set success return value (true)
 		mov eax,1					
 
 Return: 
@@ -287,8 +301,8 @@ Return:
 		ret
 
 Error:  ; set failure return value (false)
-		xor rax,rax                    
-        jmp Return
+		xor rax,rax
+		jmp Return
 
 _asm_calculate_histogram endp
 

@@ -14,6 +14,7 @@
 #include <execution>
 #include <optional>
 #include <chrono>
+#include "DllLoader.h"
 
 extern "C" unsigned __int32 NUM_PIXELS_MAX = 4294967295;
 
@@ -57,19 +58,15 @@ namespace {
 
 		histogram_t histogram(256, 0);
 
-		// TODO: return nullopt if invalid pixel input
-		//if (number_of_pixels % 32 != 0) { return std::nullopt; }
+		const auto histogram_function{
+			(policy == calculation_policy::cpp)
+				? dll_histogram::_cpp_calculate_histogram
+				: dll_histogram::_asm_calculate_histogram
+		};
 
-		if (policy == calculation_policy::cpp) {
-			for (auto pixel_value : pixel_buffer) {
-				static_assert(sizeof(pixel_value) == 1);
-				++histogram[pixel_value];
-			}
-		}
-		else {
-			// masm implementation here
-		}
-		return std::make_optional(histogram);
+		const auto result{histogram_function(histogram.data(), pixel_buffer.data(), number_of_pixels)};
+
+		return (result ? std::make_optional(histogram) : std::nullopt);
 	}
 
 	std::optional<histogram_bundle_t> calculate_all(calculation_policy policy,
@@ -129,11 +126,11 @@ void MainWidget::build_layout() {
 	connect(cpp_strategy_radio, &QRadioButton::toggled,
 	        [this, cpp_strategy_radio]
 	        {
-		        this->policy = cpp_strategy_radio->isEnabled()
-			                       ? calculation_policy::cpp
-			                       : calculation_policy::assembly;
+		        this->histograms_widget->clear();
+		        this->policy = cpp_strategy_radio->isChecked() ? calculation_policy::cpp : calculation_policy::assembly;
 		        QMessageBox::information(this, "Alert",
-		                                 "Not implemented yet.");
+		                                 "Strategy: " +
+		                                 QString(this->policy == calculation_policy::cpp ? "cpp" : "asm"));
 	        });
 }
 
@@ -212,15 +209,12 @@ void MainWidget::load_image() {
 
 void MainWidget::calc_histograms() {
 
+	this->histograms_widget->clear();
+
 	this->generate_histogram_btn->setEnabled(false);
 
 	if (this->pixel_buffers) {
-		//auto start{ std::chrono::high_resolution_clock::now() };
-		histograms_watcher.setFuture(QtConcurrent::run(calculate_all, calculation_policy::cpp, *this->pixel_buffers));
-
-		//auto histograms { calculate_all(calculation_policy::cpp, *this->pixel_buffers) };
-		//auto stop{ std::chrono::high_resolution_clock::now() };
-
+		histograms_watcher.setFuture(QtConcurrent::run(calculate_all, this->policy, *this->pixel_buffers));
 	}
 	else {
 		QMessageBox msg_box{

@@ -36,9 +36,4 @@
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="DLLCPP.def">
-      <Filter>Pliki nagłówkowe</Filter>
-    </None>
-  </ItemGroup>
 </Project>
