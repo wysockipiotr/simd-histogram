@@ -1,2 +1,2 @@
 LIBRARY "DLLASM"
-EXPORTS ExampleExport
+EXPORTS _asm_calculate_histogram

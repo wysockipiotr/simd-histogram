@@ -170,8 +170,9 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <MASM Include="AsmHistogramCalculate.asm">
+    <MASM Include="AsmCalculateHistogram.asm">
       <FileType>Document</FileType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </MASM>
   </ItemGroup>
   <ItemGroup>

@@ -133,6 +133,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AlignedAllocator.h" />
+    <ClInclude Include="DllLoader.h" />
     <ClInclude Include="HistogramsWidget.h" />
     <ClInclude Include="MessageProvider.h" />
     <ClInclude Include="Shared.h" />

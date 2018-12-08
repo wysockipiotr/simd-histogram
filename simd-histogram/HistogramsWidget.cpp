@@ -7,7 +7,6 @@
 #include <QtCharts/QLineSeries>
 #include <QtCharts/QValueAxis>
 
-
 #include "HistogramsWidget.h"
 #include "Shared.h"
 
@@ -19,9 +18,7 @@ namespace {
 } // namespace
 
 HistogramsWidget::HistogramsWidget(QWidget* parent)
-	: QWidget(parent),
-	  chart_views{} {
-
+	: QWidget(parent), chart_views{} {
 	// column of histogram chart widgets
 	auto column = new QVBoxLayout{this};
 
@@ -39,21 +36,22 @@ void HistogramsWidget::plot(const std::array<histogram_t, 4>& histograms) {
 	for (channel::index ch{0}; ch < channel::end; ++ch) { plot_channel(ch, histograms[ch]); }
 }
 
-void HistogramsWidget::plot_channel(channel::index ch, const histogram_t& histogram) {
+void HistogramsWidget::plot_channel(channel::index ch,
+                                    const histogram_t& histogram) {
 	// histogram (upper line)
 	auto series{new QtCharts::QLineSeries{this}};
 
 	// bottom straight line
 	auto bottom_series{new QtCharts::QLineSeries{this}};
-		
+
 	// populate series
-    Q_ASSERT(histogram.size() == 256);
+	Q_ASSERT(histogram.size() == 256);
 	for (auto i{0}; i < 256; ++i) {
 		series->append(i, histogram[i]);
 		bottom_series->append(i, 0);
 	}
 
-	// merge line series into area 
+	// merge line series into area
 	auto area_series{new QtCharts::QAreaSeries{series, bottom_series}};
 
 	// plot
@@ -82,4 +80,8 @@ void HistogramsWidget::plot_channel(channel::index ch, const histogram_t& histog
 	default:
 		break;
 	}
+}
+
+void HistogramsWidget::clear() {
+	for (channel::index i{0}; i < channel::end; ++i) { this->chart_views[i]->chart()->removeAllSeries(); }
 }

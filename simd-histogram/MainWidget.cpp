@@ -98,16 +98,9 @@ void MainWidget::build_layout() {
 	auto cpp_strategy_radio{new QRadioButton{"C++", strategy_box}};
 	auto asm_strategy_radio{new QRadioButton{"Assembly", strategy_box}};
 	auto radio_box_layout{new QHBoxLayout{this}};
-	connect(cpp_strategy_radio, &QRadioButton::toggled, [this, cpp_strategy_radio]
-	{
-		this->policy = cpp_strategy_radio->isEnabled()
-			               ? calculation_policy::cpp
-			               : calculation_policy::assembly;
-		QMessageBox::information(this, "Hey", "Do not touch me yet >:(");
-	});
 
 	// buttons
-	auto buttons_layout { new QHBoxLayout{this}};
+	auto buttons_layout{new QHBoxLayout{this}};
 	this->load_image_btn = new QPushButton{"Load image", this};
 	this->load_image_btn->setDefault(true);
 	this->generate_histogram_btn = new QPushButton{"Calculate histogram", this};
@@ -132,6 +125,16 @@ void MainWidget::build_layout() {
 	layout->addWidget(this->histograms_widget);
 	layout->addLayout(column);
 	column->setMargin(16);
+
+	connect(cpp_strategy_radio, &QRadioButton::toggled,
+	        [this, cpp_strategy_radio]
+	        {
+		        this->policy = cpp_strategy_radio->isEnabled()
+			                       ? calculation_policy::cpp
+			                       : calculation_policy::assembly;
+		        QMessageBox::information(this, "Alert",
+		                                 "Not implemented yet.");
+	        });
 }
 
 void MainWidget::connect_signals() const {
@@ -147,6 +150,8 @@ void MainWidget::pixel_buffers_loaded() {
 	this->message_provider->show_message(QString{"Image loaded successfully"}, 0);
 	this->generate_histogram_btn->setEnabled(true);
 	this->load_image_btn->setEnabled(true);
+
+	this->histograms_widget->clear();
 }
 
 void MainWidget::histograms_calculated() {

@@ -3,6 +3,8 @@
 #include <QDesktopWidget>
 #include <QStyle>
 #include <QMessageBox>
+#include <QApplication>
+#include "DllLoader.h"
 
 MainWindow::MainWindow(QWidget* parent)
 	: QMainWindow(parent) {
