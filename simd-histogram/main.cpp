@@ -1,11 +1,9 @@
-#include "MainWindow.h"
+#include "Ui/MainWindow.hpp"
+#include "Utils/DllLoader.hpp"
+
 #include <QtWidgets/QApplication>
-#include "DllLoader.h"
 #include <QLibrary>
 #include <QMessageBox>
-
-// inline dll_histogram::function AsmCalculateHistogram = nullptr;
-// inline dll_histogram::function CppCalculateHistogram = nullptr;
 
 bool load_dlls();
 

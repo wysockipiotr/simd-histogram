@@ -2,7 +2,7 @@
 
 #include <QtWidgets/QMainWindow>
 
-#include "MainWidget.h"
+#include "MainWidget.hpp"
 
 class MainWindow : public QMainWindow {
 Q_OBJECT

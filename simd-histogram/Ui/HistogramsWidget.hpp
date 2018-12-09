@@ -1,10 +1,6 @@
 #pragma once
 
-#include <QWidget>
-#include <array>
-#include <unordered_map>
-
-#include "Shared.h"
+#include "Utils/Shared.hpp"
 
 namespace QtCharts {
 	class QChartView;

@@ -7,8 +7,8 @@
 #include <QtCharts/QLineSeries>
 #include <QtCharts/QValueAxis>
 
-#include "HistogramsWidget.h"
-#include "Shared.h"
+#include "HistogramsWidget.hpp"
+#include "Utils/Shared.hpp"
 
 namespace {
 	const QColor MATERIAL_RED{0xF4, 0x43, 0x3};

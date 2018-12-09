@@ -5,12 +5,13 @@
 #include <QFutureWatcher>
 #include <QObject>
 
-#include "Shared.h"
-#include "MessageProvider.h"
+#include "Utils/Shared.hpp"
+#include "Utils/MessageProvider.hpp"
 
 class QPushButton;
 class HistogramsWidget;
 class QLabel;
+class QTextEdit;
 
 class MainWidget : public QWidget {
 Q_OBJECT
@@ -34,8 +35,10 @@ private:
 
 	QPushButton*		load_image_btn{};
 	QPushButton*		generate_histogram_btn{};
+    QPushButton*		export_histogram_btn{};
 	HistogramsWidget*	histograms_widget{};
 	QLabel*				image_label{};
+    QTextEdit*			info_text_edit{};
 
 	MessageProvider		message_provider;
     calculation_policy	policy {calculation_policy::cpp};

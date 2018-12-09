@@ -1,6 +1,6 @@
-#include "MainWidget.h"
-#include "HistogramsWidget.h"
-#include "Shared.h"
+#include "MainWidget.hpp"
+#include "HistogramsWidget.hpp"
+#include "Utils/Shared.hpp"
 
 #include <QVBoxLayout>
 #include <QPushButton>
@@ -10,11 +10,12 @@
 #include <QLabel>
 #include <QMessageBox>
 #include <QtConcurrent/QtConcurrent>
+#include <QTextEdit>
 
 #include <execution>
 #include <optional>
 #include <chrono>
-#include "DllLoader.h"
+#include "Utils/DllLoader.hpp"
 
 extern "C" unsigned __int32 NUM_PIXELS_MAX = 4294967295;
 
@@ -29,7 +30,8 @@ namespace {
 
 		// create temporary vector of QRgb values from raw QImage data
 		std::vector<QRgb> pixels(number_of_pixels);
-		memmove(pixels.data(), image.bits(), number_of_pixels * sizeof(QRgb)); //TODO: memmove or memcpy?
+		memmove(pixels.data(), image.bits(),
+		        number_of_pixels * sizeof(QRgb)); // TODO: memmove or memcpy?
 
 		const auto to_pixel_buffer_bundle{
 			[&channel_buffers](const QRgb& pixel)
@@ -45,15 +47,17 @@ namespace {
 			}
 		};
 
-		// split QRgb data into separate channels of a format suitable for further computation
+		// split QRgb data into separate channels of a format suitable for further
+		// computation
 		std::for_each(std::execution::par_unseq, std::cbegin(pixels),
 		              std::cend(pixels), to_pixel_buffer_bundle);
 
 		return channel_buffers;
-		// TODO return nullopt if image is incompatible 
+		// TODO return nullopt if image is incompatible
 	}
 
-	auto calculate(calculation_policy policy, const pixel_buffer_t& pixel_buffer) {
+	auto calculate(calculation_policy policy,
+	               const pixel_buffer_t& pixel_buffer) {
 		const auto number_of_pixels{pixel_buffer.size()};
 
 		histogram_t histogram(256, 0);
@@ -64,13 +68,17 @@ namespace {
 				: dll_histogram::_asm_calculate_histogram
 		};
 
-		const auto result{histogram_function(histogram.data(), pixel_buffer.data(), number_of_pixels)};
+		const auto result{
+			histogram_function(histogram.data(), pixel_buffer.data(),
+			                   number_of_pixels)
+		};
 
 		return (result ? std::make_optional(histogram) : std::nullopt);
 	}
 
-	std::optional<histogram_bundle_t> calculate_all(calculation_policy policy,
-	                                                const std::array<pixel_buffer_t, 4>& pixel_buffers) {
+	std::optional<histogram_bundle_t> calculate_all(
+		calculation_policy policy,
+		const pixel_buffer_bundle_t& pixel_buffers) {
 		histogram_bundle_t histograms{};
 		for (std::size_t i = 0; i < 4; ++i) {
 			auto histogram{calculate(policy, pixel_buffers[i])};
@@ -102,12 +110,18 @@ void MainWidget::build_layout() {
 	this->load_image_btn->setDefault(true);
 	this->generate_histogram_btn = new QPushButton{"Calculate histogram", this};
 	this->generate_histogram_btn->setEnabled(false);
+	this->export_histogram_btn = new QPushButton{"Export histogram (*.csv)"};
+	this->export_histogram_btn->setEnabled(false);
 	buttons_layout->addWidget(this->load_image_btn);
 	buttons_layout->addWidget(this->generate_histogram_btn);
 
 	this->histograms_widget = new HistogramsWidget{this};
 	this->image_label = new QLabel{this};
 	this->image_label->setText(QString{"No image"});
+
+	this->info_text_edit = new QTextEdit{"Some information", this};
+	this->info_text_edit->setReadOnly(true);
+	this->info_text_edit->setFixedWidth(400);
 
 	radio_box_layout->addWidget(cpp_strategy_radio);
 	radio_box_layout->addWidget(asm_strategy_radio);
@@ -119,6 +133,8 @@ void MainWidget::build_layout() {
 	column->addSpacing(24);
 	column->addWidget(this->image_label);
 	column->addStretch(1);
+	column->addWidget(this->info_text_edit);
+	column->addWidget(this->export_histogram_btn);
 	layout->addWidget(this->histograms_widget);
 	layout->addLayout(column);
 	column->setMargin(16);
@@ -201,7 +217,6 @@ void MainWidget::load_image() {
 }
 
 void MainWidget::calc_histograms() {
-
 	this->histograms_widget->clear();
 
 	this->generate_histogram_btn->setEnabled(false);
@@ -216,5 +231,4 @@ void MainWidget::calc_histograms() {
 		};
 		msg_box.exec();
 	}
-
 }

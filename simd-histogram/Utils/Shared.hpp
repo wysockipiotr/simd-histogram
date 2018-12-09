@@ -3,7 +3,7 @@
 #include <array>
 #include <vector>
 
-#include "AlignedAllocator.h"
+#include "AlignedAllocator.hpp"
 
 namespace custom_allocation {
 	const std::size_t alignment_16{16u};

@@ -1,10 +1,10 @@
-#include "MainWindow.h"
+#include "MainWindow.hpp"
 #include <QStatusBar>
 #include <QDesktopWidget>
 #include <QStyle>
 #include <QMessageBox>
 #include <QApplication>
-#include "DllLoader.h"
+#include "Utils/DllLoader.hpp"
 
 MainWindow::MainWindow(QWidget* parent)
 	: QMainWindow(parent) {
