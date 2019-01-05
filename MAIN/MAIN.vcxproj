@@ -13,7 +13,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B12702AD-ABFB-343A-A199-8E24837244A3}</ProjectGuid>
     <Keyword>Qt4VSv1.0</Keyword>
-    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
@@ -40,9 +40,7 @@
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.props')">
     <Import Project="$(QtMsBuild)\qt.props" />
   </ImportGroup>
-  <ImportGroup Label="ExtensionSettings">
-    <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.props" />
-  </ImportGroup>
+  <ImportGroup Label="ExtensionSettings" />
   <ImportGroup Label="Shared" />
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -55,12 +53,11 @@
     <ClCompile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <PreprocessorDefinitions>UNICODE;_UNICODE;WIN32;WIN64;QT_DLL;QT_CHARTS_LIB;QT_CORE_LIB;QT_GUI_LIB;QT_WIDGETS_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.\GeneratedFiles;.;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName);$(QTDIR)\include\QtCharts;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtWidgets;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\GeneratedFiles;.;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName);$(QTDIR)\include\QtCharts;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtWidgets;.\Ui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Disabled</Optimization>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
-      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -72,7 +69,7 @@
     <QtMoc>
       <OutputFile>.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</OutputFile>
       <ExecutionDescription>Moc'ing %(Identity)...</ExecutionDescription>
-      <IncludePath>.\GeneratedFiles;.;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName)\.;$(QTDIR)\include\QtCharts;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtWidgets</IncludePath>
+      <IncludePath>.\GeneratedFiles;.;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName);$(QTDIR)\include\QtCharts;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtWidgets;.\Ui;%(AdditionalIncludeDirectories)</IncludePath>
       <Define>UNICODE;_UNICODE;WIN32;WIN64;QT_DLL;QT_CHARTS_LIB;QT_CORE_LIB;QT_GUI_LIB;QT_WIDGETS_LIB</Define>
     </QtMoc>
     <QtUic>
@@ -88,7 +85,7 @@
     <ClCompile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <PreprocessorDefinitions>UNICODE;_UNICODE;WIN32;WIN64;QT_DLL;QT_NO_DEBUG;NDEBUG;QT_CHARTS_LIB;QT_CORE_LIB;QT_GUI_LIB;QT_WIDGETS_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.\GeneratedFiles;.;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName);$(QTDIR)\include\QtCharts;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtWidgets;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\GeneratedFiles;.;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName);$(QTDIR)\include\QtCharts;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtWidgets;.\Ui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat />
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
@@ -104,7 +101,7 @@
     <QtMoc>
       <OutputFile>.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</OutputFile>
       <ExecutionDescription>Moc'ing %(Identity)...</ExecutionDescription>
-      <IncludePath>.\GeneratedFiles;.;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName)\.;$(QTDIR)\include\QtCharts;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtWidgets</IncludePath>
+      <IncludePath>.\GeneratedFiles;.;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName);$(QTDIR)\include\QtCharts;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtWidgets;.\Ui;%(AdditionalIncludeDirectories)</IncludePath>
       <Define>UNICODE;_UNICODE;WIN32;WIN64;QT_DLL;QT_NO_DEBUG;NDEBUG;QT_CHARTS_LIB;QT_CORE_LIB;QT_GUI_LIB;QT_WIDGETS_LIB</Define>
     </QtMoc>
     <QtUic>
@@ -118,23 +115,39 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Processing\ProcessingService.cpp" />
+    <ClCompile Include="Ui\ControlWidget.cpp" />
     <ClCompile Include="Ui\HistogramsWidget.cpp" />
-    <ClCompile Include="Ui\MainWidget.cpp" />
+    <ClCompile Include="Ui\ImagePreviewWidget.cpp" />
     <ClCompile Include="Ui\MainWindow.cpp" />
+    <ClCompile Include="Utils\RuntimeDll.cpp" />
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="MainWindow.qrc" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="simd-histogram.rc" />
+    <ResourceCompile Include="MAIN.rc" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Ui\HistogramsWidget.hpp" />
-    <QtMoc Include="Ui\MainWidget.hpp" />
+    <QtMoc Include="Ui\LogWidget.hpp">
+      <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles;.;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName)\.;$(QTDIR)\include\QtCharts;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtWidgets;.\Ui</IncludePath>
+      <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles;.;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName)\.;$(QTDIR)\include\QtCharts;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtWidgets;.\Ui</IncludePath>
+    </QtMoc>
+    <QtMoc Include="Ui\ControlWidget.hpp">
+      <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles;.;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName)\.;$(QTDIR)\include\QtCharts;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtWidgets;.\Ui</IncludePath>
+      <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles;.;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName)\.;$(QTDIR)\include\QtCharts;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtWidgets;.\Ui</IncludePath>
+    </QtMoc>
+    <QtMoc Include="Ui\ImagePreviewWidget.hpp">
+      <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles;.;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName)\.;$(QTDIR)\include\QtCharts;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtWidgets;.\Ui</IncludePath>
+      <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles;.;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName)\.;$(QTDIR)\include\QtCharts;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtWidgets;.\Ui</IncludePath>
+    </QtMoc>
+    <QtMoc Include="Processing\ProcessingService.hpp" />
+    <ClInclude Include="Ui\ImageLabel.hpp" />
+    <ClInclude Include="Utils\QtForwardDeclarations.hpp" />
     <QtMoc Include="Ui\MainWindow.hpp" />
     <ClInclude Include="Utils\AlignedAllocator.hpp" />
-    <ClInclude Include="Utils\DllLoader.hpp" />
-    <ClInclude Include="Utils\MessageProvider.hpp" />
+    <ClInclude Include="Utils\RuntimeDll.hpp" />
     <ClInclude Include="Utils\Shared.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
@@ -142,11 +155,10 @@
     <Import Project="$(QtMsBuild)\qt.targets" />
   </ImportGroup>
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.targets" />
   </ImportGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties MocDir=".\GeneratedFiles\$(ConfigurationName)" UicDir=".\GeneratedFiles" RccDir=".\GeneratedFiles" lupdateOptions="" lupdateOnBuild="0" lreleaseOptions="embed_manifest_dll embed_manifest_exe" Qt5Version_x0020_x64="msvc2017_64" MocOptions="" />
+      <UserProperties MocDir=".\GeneratedFiles\$(ConfigurationName)" UicDir=".\GeneratedFiles" RccDir=".\GeneratedFiles" lupdateOptions="" lupdateOnBuild="0" lreleaseOptions="" Qt5Version_x0020_x64="msvc2017_64" MocOptions="" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

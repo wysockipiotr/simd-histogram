@@ -15,35 +15,21 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DLL_ASM.hpp">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="stdafx.hpp">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="targetver.hpp">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
+    <None Include="DLLASM.asm">
+      <Filter>Pliki źródłowe</Filter>
+    </None>
+    <None Include="DLLASM.def">
+      <Filter>Pliki źródłowe</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="stdafx.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="DLL_ASM.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
     <ClCompile Include="dllmain.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <MASM Include="AsmCalculateHistogram.asm">
-      <Filter>Pliki źródłowe</Filter>
-    </MASM>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="DLLASM.def">
+    <ClInclude Include="DLL_ASM.hpp">
       <Filter>Pliki nagłówkowe</Filter>
-    </None>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -9,107 +9,51 @@
 ;						
 ;	PLATFORM			
 ;						MASM x86-64
-;						SSE
+;						AVX
 ;
 ; ---------------------------------------------------------------------------------------------------------------
-
 
 .code
 
-	extern MAX_NUMBER_OF_PIXELS : dword
+	extern k_max_number_of_pixels : dword ; unsigned __int32
 
 
-; ---------------------------------------------------------------------------------------------------------------
-;
-;	MACRO				
-;						_process_16_pixels_using xmm_a xmm_b
-;
-;	PARAMS				
-;						xmm_a, xmm_b -- non-volatile XMM registers 
-;
-;	REGISTER CONTENT	
-;						RSI -- pointer to main histogram
-;						RDI -- pointer to auxiliary histogram
-;						xmm_a -- contains 16 pixels data
-;						xmm_b -- copy of xmm_a
-;
-;	OPERATION			
-;						simultaneously constructs two partial histograms from 16 pixels (bytes)
-;
-;	PLATFORM			
-;						MASM x86-64
-;						SSE
-;
-; ---------------------------------------------------------------------------------------------------------------
-_process_16_pixels_using macro xmm_a, xmm_b
-		pextrb rax,xmm_a,0
+_avx_process_16_pixels_using macro xmm_a, xmm_b
+		vpextrb rax,xmm_a,0
 		add dword ptr [rsi+rax*4],1       
-		pextrb rbx,xmm_b,1
+		vpextrb rbx,xmm_b,1
 		add dword ptr [rdi+rbx*4],1       
-		pextrb rcx,xmm_a,2
+		vpextrb rcx,xmm_a,2
 		add dword ptr [rsi+rcx*4],1       
-		pextrb rdx,xmm_b,3
+		vpextrb rdx,xmm_b,3
 		add dword ptr [rdi+rdx*4],1       
-		pextrb rax,xmm_a,4
+		vpextrb rax,xmm_a,4
 		add dword ptr [rsi+rax*4],1       
-		pextrb rbx,xmm_b,5
+		vpextrb rbx,xmm_b,5
 		add dword ptr [rdi+rbx*4],1       
-		pextrb rcx,xmm_a,6
+		vpextrb rcx,xmm_a,6
 		add dword ptr [rsi+rcx*4],1       
-		pextrb rdx,xmm_b,7
+		vpextrb rdx,xmm_b,7
 		add dword ptr [rdi+rdx*4],1       
-		pextrb rax,xmm_a,8
+		vpextrb rax,xmm_a,8
 		add dword ptr [rsi+rax*4],1     
-		pextrb rbx,xmm_b,9
+		vpextrb rbx,xmm_b,9
 		add dword ptr [rdi+rbx*4],1     
-		pextrb rcx,xmm_a,10
+		vpextrb rcx,xmm_a,10
 		add dword ptr [rsi+rcx*4],1     
-		pextrb rdx,xmm_b,11
+		vpextrb rdx,xmm_b,11
 		add dword ptr [rdi+rdx*4],1     
-		pextrb rax,xmm_a,12
+		vpextrb rax,xmm_a,12
 		add dword ptr [rsi+rax*4],1     
-		pextrb rbx,xmm_b,13
+		vpextrb rbx,xmm_b,13
 		add dword ptr [rdi+rbx*4],1     
-		pextrb rcx,xmm_a,14
+		vpextrb rcx,xmm_a,14
 		add dword ptr [rsi+rcx*4],1     
-		pextrb rdx,xmm_b,15
+		vpextrb rdx,xmm_b,15
 		add dword ptr [rdi+rdx*4],1     
 ; _process_16_pixels_using
 endm
 
-
-; ---------------------------------------------------------------------------------------------------------------
-;
-;	PROCEDURE			
-;						_asm_calculate_histogram
-;
-;	CPP DECLARATION		
-;						extern "C" bool _asm_calculate_histogram(
-;						unsigned __int32* histogram, 
-;						unsigned __int8* pixel_buffer,  
-;						unsigned __int32 number_of_pixels
-;						);
-;
-;	PARAMS				
-;						histogram -- pointer to 256-byte histogram array, 
-;						pixel_buffer -- pointer to buffer of pixel values
-;						number_of_pixels -- total number of pixels in pixel_buffer
-;
-;	OPERATION
-;						creates histogram from 8-bit pixel buffer (one channel of rgb image)
-;
-;	MODIFIED REGISTERS	
-;						TODO
-;
-;	PLATFORM			
-;						MASM x86-64
-;						SSE
-;
-;	RETURNS				
-;						true -- histogram calculation successful 
-;						false -- invalid number_of_pixels or alignment 
-;
-; ---------------------------------------------------------------------------------------------------------------
 _asm_calculate_histogram proc frame
 
 		;
@@ -165,7 +109,7 @@ _asm_calculate_histogram proc frame
 ; Make sure num_pixels is valid
 		test r8d,r8d
 		jz Error
-		cmp r8d, [MAX_NUMBER_OF_PIXELS]
+		cmp r8d, [k_max_number_of_pixels]
 		ja Error
 
 
@@ -211,19 +155,20 @@ _asm_calculate_histogram proc frame
 		
 ProcessNext:	
 		; load first 16 of 32 pixels (bytes) 
-		movdqa xmm0,[r9]                    
-		movdqa xmm1,xmm0
+		vmovdqa xmm0, xmmword ptr [r9]              
+
+		vmovdqa xmm1,xmm0
 
 		; load second 16 of 32 pixels (bytes)
-		movdqa xmm2,[r9+16]                 
-		movdqa xmm3,xmm2
+		vmovdqa xmm2, xmmword ptr [r9+16]                 
+		vmovdqa xmm3,xmm2
 
 
 		; process pixels 0..15
-		_process_16_pixels_using xmm0, xmm1
+		_avx_process_16_pixels_using xmm0, xmm1
 
 		; process pixels 16..32
-		_process_16_pixels_using xmm2, xmm3
+		_avx_process_16_pixels_using xmm2, xmm3
 
 
 		; move pixel buffer pointer by 32 (so it points to next 32-pixel chunk)
@@ -244,16 +189,16 @@ ProcessNext:
 
 MergeNext:
 		; xmm0:xmm1 contains main histogram 8-entries chunk
-		movdqa xmm0,xmmword ptr [rsi+rax]
-		movdqa xmm1,xmmword ptr [rsi+rax+16]
+		vmovdqa xmm0,xmmword ptr [rsi+rax]
+		vmovdqa xmm1,xmmword ptr [rsi+rax+16]
 
 		; add auxiliary histogram chunk to main histogram chunk
-		paddd xmm0,xmmword ptr [rdi+rax]        
-		paddd xmm1,xmmword ptr [rdi+rax+16]
+		vpaddd xmm0,xmm0,xmmword ptr [rdi+rax]        
+		vpaddd xmm1,xmm1,xmmword ptr [rdi+rax+16]
 
 		; store result under destination address
-		movdqa xmmword ptr [rsi+rax],xmm0 
-		movdqa xmmword ptr [rsi+rax+16],xmm1
+		vmovdqa xmmword ptr [rsi+rax],xmm0 
+		vmovdqa xmmword ptr [rsi+rax+16],xmm1
 
 		; advance xmmword ptr for next chunk processing
 		add rax,32
@@ -273,7 +218,7 @@ Residue:
 		mov rdx, r11
 
 		; rdx points to last element in the pixel buffer
-		lea rdx, qword ptr [rdx+rax-1]	
+		lea rdx, qword ptr [rdx+rax-1]			
 
 		; rax, rcx contain number of remaining pixels [0-31]
 		and rax, 31						
@@ -285,17 +230,17 @@ ProcessNextRemaining:
 		je	Ok		
 		
 		; eax contains intensity of pointed pixel
-		movzx eax, byte ptr [rdx]		
-
+		movzx eax, byte ptr [rdx]	
+		
 		; increment corresponding histogram entry 
-		add dword ptr [rsi+rax*4],1		
+		add dword ptr [rsi+rax*4],1
 
 		; decrement iteration counter
 		sub rcx,1			
 		
 		; move pixel buffer pointer one pixel backwards
 		sub	rdx,1	
-		
+
 		jmp ProcessNextRemaining
 
 
@@ -322,5 +267,6 @@ Error:	; set failure return value (false)
 		jmp Return
 
 _asm_calculate_histogram endp
+
 
 end

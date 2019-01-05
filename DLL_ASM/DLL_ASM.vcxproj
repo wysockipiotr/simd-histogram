@@ -20,10 +20,10 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{EBF099C7-9854-4AA3-967F-4151FF734E4E}</ProjectGuid>
+    <ProjectGuid>{99823066-4954-4FE4-BBC5-C739E90DB1B9}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>DLLASM</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -89,7 +89,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -97,8 +97,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;DLLASM_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp17</LanguageStandard>
-      <PrecompiledHeaderFile>stdafx.hpp</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile />
+      <PrecompiledHeaderOutputFile />
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -134,7 +134,6 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ModuleDefinitionFile>DLLASM.def</ModuleDefinitionFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -157,27 +156,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="DLL_ASM.hpp" />
-    <ClInclude Include="stdafx.hpp" />
-    <ClInclude Include="targetver.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <MASM Include="DLLASM.asm">
+      <FileType>Document</FileType>
+    </MASM>
+    <None Include="DLLASM.def" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
-    <ClCompile Include="DLL_ASM.cpp" />
-    <ClCompile Include="stdafx.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <MASM Include="AsmCalculateHistogram.asm">
-      <FileType>Document</FileType>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
-    </MASM>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="DLLASM.def" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

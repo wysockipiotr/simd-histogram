@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{D9D6E242-F8AF-46E4-B9FD-80ECBC20BA3E}</UniqueIdentifier>
+      <Extensions>qrc;*</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="Form Files">
+      <UniqueIdentifier>{99349809-55BA-4b9d-BF79-8FDBB0286EB3}</UniqueIdentifier>
+      <Extensions>ui</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{D9D6E242-F8AF-46E4-B9FD-80ECBC20BA3E}</UniqueIdentifier>
+      <Extensions>qrc;*</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="Generated Files">
+      <UniqueIdentifier>{71ED8ED8-ACB9-4CE9-BBE1-E00B30144E11}</UniqueIdentifier>
+      <Extensions>moc;h;cpp</Extensions>
+      <SourceControlFiles>False</SourceControlFiles>
+    </Filter>
+    <Filter Include="Header Files\Ui">
+      <UniqueIdentifier>{6ace24c6-6c90-45ba-888f-a1d3721b7505}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Processing">
+      <UniqueIdentifier>{881736f2-dec5-408b-b5ad-fcdf8905bbf8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Utils">
+      <UniqueIdentifier>{3ac403b5-3204-4187-a32e-9833dedfcbc5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Utils">
+      <UniqueIdentifier>{f069b327-1047-477e-b718-201b7512db1d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Processing">
+      <UniqueIdentifier>{fbc44a12-f614-4c1d-9442-e0f1d4d2f695}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Ui">
+      <UniqueIdentifier>{ea30e7f7-2b8a-428f-872e-ee86d419a3f7}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\RuntimeDll.cpp">
+      <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Ui\MainWindow.cpp">
+      <Filter>Source Files\Ui</Filter>
+    </ClCompile>
+    <ClCompile Include="Ui\ImagePreviewWidget.cpp">
+      <Filter>Source Files\Ui</Filter>
+    </ClCompile>
+    <ClCompile Include="Ui\ControlWidget.cpp">
+      <Filter>Source Files\Ui</Filter>
+    </ClCompile>
+    <ClCompile Include="Ui\HistogramsWidget.cpp">
+      <Filter>Source Files\Ui</Filter>
+    </ClCompile>
+    <ClCompile Include="Processing\ProcessingService.cpp">
+      <Filter>Source Files\Processing</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="MainWindow.qrc">
+      <Filter>Resource Files</Filter>
+    </QtRcc>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="MAIN.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Utils\AlignedAllocator.hpp">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\RuntimeDll.hpp">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Shared.hpp">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\QtForwardDeclarations.hpp">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Ui\HistogramsWidget.hpp">
+      <Filter>Header Files\Ui</Filter>
+    </ClInclude>
+    <ClInclude Include="Ui\ImageLabel.hpp">
+      <Filter>Header Files\Ui</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="Ui\MainWindow.hpp">
+      <Filter>Header Files\Ui</Filter>
+    </QtMoc>
+    <QtMoc Include="Processing\ProcessingService.hpp">
+      <Filter>Header Files\Processing</Filter>
+    </QtMoc>
+    <QtMoc Include="Ui\ControlWidget.hpp">
+      <Filter>Header Files\Ui</Filter>
+    </QtMoc>
+    <QtMoc Include="Ui\LogWidget.hpp">
+      <Filter>Header Files\Ui</Filter>
+    </QtMoc>
+    <QtMoc Include="Ui\ImagePreviewWidget.hpp">
+      <Filter>Header Files\Ui</Filter>
+    </QtMoc>
+  </ItemGroup>
+</Project>

@@ -24,7 +24,7 @@ public:
 	};
 
 	aligned_allocator() noexcept = default;
-    aligned_allocator(const aligned_allocator&) noexcept = default;
+	aligned_allocator(const aligned_allocator&) noexcept = default;
 
 	template <class U>
 	explicit aligned_allocator(const aligned_allocator<U, A>&) noexcept {}
@@ -34,7 +34,7 @@ public:
 	pointer address(reference r) { return &r; }
 	const_pointer address(const_reference r) const { return &r; }
 
-	auto allocate(size_type n, const_pointer hint = nullptr);
+	T* allocate(size_type n, const_pointer hint = nullptr);
 	void deallocate(pointer p, size_type);
 
 	void construct(pointer p, const_reference value) { new(p) value_type(value); }
@@ -47,7 +47,7 @@ public:
 };
 
 template <class T, std::size_t A>
-auto aligned_allocator<T, A>::allocate(size_type n, const_pointer hint) {
+T* aligned_allocator<T, A>::allocate(size_type n, const_pointer hint) {
 	if (auto res = static_cast<T*>(_aligned_malloc(n * sizeof(T), A))) { return res; }
 	throw std::bad_alloc{};
 }

@@ -15,6 +15,7 @@ namespace {
 	const QColor MATERIAL_GREEN{0x4C, 0xAF, 0x50};
 	const QColor MATERIAL_BLUE{0x21, 0x96, 0xF3};
 	const QColor MATERIAL_GRAY{0x9E, 0x9E, 0x9E};
+	const std::array<const QString, 4> HISTOGRAM_NAMES{"Red", "Green", "Blue", "Luminance"};
 } // namespace
 
 HistogramsWidget::HistogramsWidget(QWidget* parent)
@@ -27,6 +28,7 @@ HistogramsWidget::HistogramsWidget(QWidget* parent)
 		chart_views[ch] = chart_view;
 		chart_view->setChart(new QtCharts::QChart);
 		chart_view->setRenderHint(QPainter::Antialiasing);
+		chart_view->setToolTip(HISTOGRAM_NAMES[ch] + " histogram");
 		column->addWidget(chart_view);
 	}
 	setLayout(column);
@@ -63,15 +65,15 @@ void HistogramsWidget::plot_channel(channel::index ch,
 	switch (ch) {
 	case channel::red:
 		area_series->setColor(MATERIAL_RED);
-		widget->chart()->setTitle("R");
+		widget->chart()->setTitle("Red");
 		break;
 	case channel::green:
 		area_series->setColor(MATERIAL_GREEN);
-		widget->chart()->setTitle("G");
+		widget->chart()->setTitle("Green");
 		break;
 	case channel::blue:
 		area_series->setColor(MATERIAL_BLUE);
-		widget->chart()->setTitle("B");
+		widget->chart()->setTitle("Blue");
 		break;
 	case channel::luminance:
 		area_series->setColor(MATERIAL_GRAY);

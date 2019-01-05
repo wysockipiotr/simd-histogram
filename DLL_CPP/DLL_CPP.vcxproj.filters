@@ -15,25 +15,16 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DLL_CPP.hpp">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="stdafx.hpp">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="targetver.hpp">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="stdafx.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
     <ClCompile Include="DLL_CPP.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="dllmain.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="DLL_CPP.hpp">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
