@@ -69,6 +69,9 @@
     <ClCompile Include="Processing\ProcessingService.cpp">
       <Filter>Source Files\Processing</Filter>
     </ClCompile>
+    <ClCompile Include="Utils\Cpuinfo.cpp">
+      <Filter>Source Files\Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="MainWindow.qrc">
@@ -96,6 +99,9 @@
     </ClInclude>
     <ClInclude Include="Ui\ImageLabel.hpp">
       <Filter>Header Files\Ui</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Cpuinfo.hpp">
+      <Filter>Header Files\Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

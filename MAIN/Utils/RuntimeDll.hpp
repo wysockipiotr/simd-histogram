@@ -1,5 +1,4 @@
 #pragma once
-#include <QLibrary>
 #include "Shared.hpp"
 
 namespace runtime_dll {

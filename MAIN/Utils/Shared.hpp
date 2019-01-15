@@ -51,6 +51,11 @@ using pixel_buffer_bundle_t = std::array<pixel_buffer_t, 4>;
 template <typename T>
 using timed_result = std::pair<T, std::chrono::duration<double>>;
 
+struct benchmark_result_t {
+  std::chrono::duration<double> cpp_elapsed;
+  std::chrono::duration<double> asm_elapsed;
+};
+
 // std time units
 using seconds = std::chrono::duration<double>;
 using milliseconds =

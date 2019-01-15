@@ -3,6 +3,7 @@
 #include <QtWidgets/QMainWindow>
 #include "Utils/Shared.hpp"
 #include "Processing/ProcessingService.hpp"
+#include <thread>
 
 class MainWindow : public QMainWindow {
 Q_OBJECT
@@ -22,5 +23,8 @@ private:
 
 	ProcessingService m_processing_service;
 
+	// calculation parameters
 	calculation_policy m_calculation_policy{calculation_policy::cpp};
+	unsigned m_number_of_threads{};
+	unsigned m_benchmark_number_of_iterations{100};
 };

@@ -11,6 +11,8 @@ public:
 
 public slots:
 	void set_image(const QImage& image);
+	void clear_image();
+
 
 protected:
 	void resizeEvent(QResizeEvent* event) override;

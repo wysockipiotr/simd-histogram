@@ -12,6 +12,7 @@ public:
 
 	void set_image(const QImage& image) { m_pixmap = QPixmap::fromImage(image).scaledToHeight(250); }
 
+
 protected:
 	QSize minimumSizeHint() const override { return {200, 200}; }
 	QSize sizeHint() const override { return m_resized; }

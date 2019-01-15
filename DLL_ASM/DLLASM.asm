@@ -103,27 +103,27 @@ _asm_calculate_histogram proc frame
 		mov r9,rdx
 
 		; pixel buffer is properly aligned if its address MOD 16 = 0
-		test r9,15
-		jnz Error
+;		test r9,15
+;		jnz Error
 
 ; Make sure num_pixels is valid
-		test r8d,r8d
-		jz Error
-		cmp r8d, [k_max_number_of_pixels]
-		ja Error
+;		test r8d,r8d
+;		jz Error
+;		cmp r8d, [k_max_number_of_pixels]
+;		ja Error
 
 
 ; zero-initialize both main and auxiliary histogram buffers
 		xor rax,rax
 
 		; rdi points to main histogram buffer
-		mov rdi,rsi                  
+;		mov rdi,rsi                  
 		
 		; 128 * 8 (bytes in quadword) = 1024 bytes (size of histogram)
-		mov rcx,128    
+;		mov rcx,128    
 		
 		; zeros
-		rep stosq                           
+;		rep stosq                           
 
 
 		; rdi points to auxiliary histogram buffer
@@ -148,19 +148,18 @@ _asm_calculate_histogram proc frame
 		shr r8d,5 
 
 		; rdi points to auxiliary histogram 
-		mov rdi,rbp                       
+		mov rdi,rbp
 
 		; jump destination alignment
-		align 16                            
+		align 16
 		
 ProcessNext:	
 		; load first 16 of 32 pixels (bytes) 
-		vmovdqa xmm0, xmmword ptr [r9]              
-
+		vmovdqa xmm0, xmmword ptr [r9]
 		vmovdqa xmm1,xmm0
 
 		; load second 16 of 32 pixels (bytes)
-		vmovdqa xmm2, xmmword ptr [r9+16]                 
+		vmovdqa xmm2, xmmword ptr [r9+16]
 		vmovdqa xmm3,xmm2
 
 
@@ -177,13 +176,13 @@ ProcessNext:
 		; loop while there are any 32-pixel chunks
 		;dec r8
 		sub r8,1
-		jnz ProcessNext                              
+		jnz ProcessNext
 
 		
 ; combine main and auxiliary histograms
 
 		; set number of necessary iterations (32 * 8 histogram entries = 256 entries (the whole histogram)) 
-		mov ecx,32							
+		mov ecx,32
 
 		xor rax,rax
 
