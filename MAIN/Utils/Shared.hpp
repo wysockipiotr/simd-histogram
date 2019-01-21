@@ -48,12 +48,14 @@ std::vector<pixel_t,
 // ordered quadruple of pixel buffers (red, green, blue, luminance/gray)
 using pixel_buffer_bundle_t = std::array<pixel_buffer_t, 4>;
 
+using duration_t = std::chrono::duration<double>;
+
 template <typename T>
 using timed_result = std::pair<T, std::chrono::duration<double>>;
 
 struct benchmark_result_t {
-  std::chrono::duration<double> cpp_elapsed;
-  std::chrono::duration<double> asm_elapsed;
+  duration_t cpp_elapsed;
+  duration_t asm_elapsed;
 };
 
 // std time units
@@ -64,3 +66,5 @@ std::chrono::duration<double,
 using microseconds =
 std::chrono::duration<double,
                       std::ratio_multiply<seconds::period, std::micro>>;
+
+

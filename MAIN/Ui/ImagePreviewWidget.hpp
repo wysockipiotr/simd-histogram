@@ -1,24 +1,30 @@
 #pragma once
 
+#include <QLabel>
+#include <QPixmap>
+#include <QStylePainter>
 #include <QWidget>
-#include <QDockWidget>
 
-class ImagePreviewWidget : public QWidget {
+class ImagePreviewWidget : public QLabel {
 Q_OBJECT
 
 public:
-	ImagePreviewWidget(QWidget* parent = nullptr);
+	ImagePreviewWidget(QWidget * parent = nullptr);
 
-public slots:
-	void set_image(const QImage& image);
+	void set_image(const QImage & image);
+
 	void clear_image();
 
+	void paintEvent(QPaintEvent * aEvent);
+
+	void setPixmap(QPixmap aPicture);
 
 protected:
-	void resizeEvent(QResizeEvent* event) override;
+	QSize minimumSizeHint() const override;
 
 private:
-	QPixmap m_image_pixmap;
-	class QLabel* m_image_label{};
-	class QVBoxLayout* m_layout{};
+	void _display_image();
+
+	QPixmap m_source_pixmap;
+	QPixmap m_current_pixmap;
 };

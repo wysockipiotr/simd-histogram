@@ -166,31 +166,8 @@ namespace {
 
 ProcessingService::ProcessingService(QObject * parent)
 	: QObject(parent) {
-	connect(&this->channels_loaded_watcher,
-	        &QFutureWatcher<QFutureWatcher<pixel_buffer_bundle_t>>::finished,
-	        [this] {
-		        this->channels = this->channels_loaded_watcher.result();
-		        emit channels_ready();
-	        });
 
-	connect(&this->histograms_calculated_watcher,
-	        &QFutureWatcher<std::optional<timed_result<histogram_bundle_t>>>::finished,
-	        [this] {
-		        if (histograms_calculated_watcher.result().has_value()) {
-			        const auto [histograms, elapsed] =
-					        *( histograms_calculated_watcher.result() );
-			        this->histograms = histograms;
-			        m_channels_are_loaded = true;
-			        emit histograms_calculated(elapsed, histograms);
-		        }
-	        });
-
-	connect(&m_benchmark_complete_watcher, &QFutureWatcher<std::optional<benchmark_result_t>>::finished, [this] {
-		const auto result { m_benchmark_complete_watcher.result() };
-		if (result.has_value()) {
-			emit benchmark_complete(*result);
-		}
-	});
+	connect_signals();
 }
 
 void ProcessingService::load_channels(const QImage & image) {
@@ -286,4 +263,41 @@ void ProcessingService::run_benchmark(unsigned number_of_tasks,
 
 	const auto future_benchmark_results { QtConcurrent::run(run_benchmark_job) };
 	m_benchmark_complete_watcher.setFuture(future_benchmark_results);
+}
+
+void ProcessingService::connect_signals() {
+
+	// on channels loaded 
+	connect(&this->channels_loaded_watcher,
+	        &QFutureWatcher<QFutureWatcher<pixel_buffer_bundle_t>>::finished,
+	        [this] {
+		        this->channels = this->channels_loaded_watcher.result();
+		        emit channels_ready();
+	        }
+	);
+
+	// on histograms calculated
+	connect(&this->histograms_calculated_watcher,
+	        &QFutureWatcher<std::optional<timed_result<histogram_bundle_t>>>::finished,
+	        [this] {
+		        if (histograms_calculated_watcher.result().has_value()) {
+			        const auto [histograms, elapsed] =
+					        *( histograms_calculated_watcher.result() );
+			        this->histograms = histograms;
+			        m_channels_are_loaded = true;
+			        emit histograms_calculated(elapsed, histograms);
+		        }
+	        }
+	);
+
+	// on benchmark finished
+	connect(&m_benchmark_complete_watcher,
+	        &QFutureWatcher<std::optional<benchmark_result_t>>::finished,
+	        [this] {
+		        const auto result { m_benchmark_complete_watcher.result() };
+		        if (result.has_value()) {
+			        emit benchmark_complete(*result);
+		        }
+	        }
+	);
 }

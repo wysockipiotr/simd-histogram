@@ -72,6 +72,9 @@
     <ClCompile Include="Utils\Cpuinfo.cpp">
       <Filter>Source Files\Utils</Filter>
     </ClCompile>
+    <ClCompile Include="Ui\LogWidget.cpp">
+      <Filter>Source Files\Ui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="MainWindow.qrc">
@@ -91,13 +94,7 @@
     <ClInclude Include="Utils\Shared.hpp">
       <Filter>Header Files\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Utils\QtForwardDeclarations.hpp">
-      <Filter>Header Files\Utils</Filter>
-    </ClInclude>
     <ClInclude Include="Ui\HistogramsWidget.hpp">
-      <Filter>Header Files\Ui</Filter>
-    </ClInclude>
-    <ClInclude Include="Ui\ImageLabel.hpp">
       <Filter>Header Files\Ui</Filter>
     </ClInclude>
     <ClInclude Include="Utils\Cpuinfo.hpp">

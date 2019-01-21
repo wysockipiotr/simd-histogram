@@ -32,6 +32,8 @@ signals:
 
 private:
 
+	void connect_signals();
+
 	bool m_channels_are_loaded { false };
 
 	pixel_buffer_bundle_t channels;

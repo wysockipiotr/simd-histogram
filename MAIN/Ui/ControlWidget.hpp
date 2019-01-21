@@ -14,6 +14,10 @@ public slots:
 
 	void lock_run_benchmark_from_image_button(bool lock);
 
+	void lock_tasks_number_spinbox(bool lock);
+
+	void lock_all_controls(bool lock);
+
 signals :
 	// params modified
 	void calculation_policy_changed(calculation_policy policy);
@@ -30,17 +34,18 @@ signals :
 	void run_benchmark_from_image_pressed();
 
 private:
-	void init_layout();
+	void _init_layout();
 
-	void init_widgets();
+	void _init_widgets();
 
-	void connect_signals();
+	void _connect_signals();
 
 	// buttons
 	class QPushButton * load_image_btn {};
 	class QPushButton * generate_histogram_btn {};
 	class QPushButton * m_benchmark_from_image_btn {};
-	class QPushButton * m_benchmark_from_generated_btn {};
+	class QGroupBox * m_strategy_box {};
+	class QRadioButton * m_cpp_strategy_radio {};
 
 	// spinboxes
 	class QSpinBox * m_iterations_number_spinbox {};

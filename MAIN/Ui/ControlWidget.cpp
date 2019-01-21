@@ -10,9 +10,9 @@
 #include <thread>
 
 ControlWidget::ControlWidget(QWidget * parent) {
-	init_widgets();
-	init_layout();
-	connect_signals();
+	_init_widgets();
+	_init_layout();
+	_connect_signals();
 }
 
 void ControlWidget::lock_load_image_button(bool lock) {
@@ -24,24 +24,37 @@ void ControlWidget::lock_generate_histograms_button(bool lock) {
 }
 
 void ControlWidget::lock_run_benchmark_from_image_button(bool lock) {
-  m_benchmark_from_image_btn->setDisabled(lock);
+	m_benchmark_from_image_btn->setDisabled(lock);
 }
 
-void ControlWidget::init_layout() {
+void ControlWidget::lock_tasks_number_spinbox(bool lock) {
+	m_number_of_tasks_spinbox->setDisabled(lock);
+}
+
+void ControlWidget::lock_all_controls(bool lock) {
+	lock_load_image_button(lock);
+	lock_generate_histograms_button(lock);
+	lock_run_benchmark_from_image_button(lock);
+	m_iterations_number_spinbox->setDisabled(lock);
+	lock_tasks_number_spinbox(lock);
+	m_strategy_box->setDisabled(lock);
+}
+
+void ControlWidget::_init_layout() {
 
 	// init layouts
 	auto column { new QVBoxLayout{ this } };
 
 	// strategy radio group box
-	auto strategy_box { new QGroupBox{ tr("Histogram calculation policy"), this } };
-	const auto cpp_strategy_radio { new QRadioButton{ tr("C++"), strategy_box } };
-	const auto asm_strategy_radio { new QRadioButton{ tr("Assembly"), strategy_box } };
+	m_strategy_box = new QGroupBox{ tr("Histogram calculation policy"), this };
+	m_cpp_strategy_radio = new QRadioButton{ tr("C++"), m_strategy_box };
+	const auto asm_strategy_radio { new QRadioButton{ tr("Assembly"), m_strategy_box } };
 	const auto radio_box_layout { new QHBoxLayout{ this } };
 
-	radio_box_layout->addWidget(cpp_strategy_radio);
+	radio_box_layout->addWidget(m_cpp_strategy_radio);
 	radio_box_layout->addWidget(asm_strategy_radio);
-	strategy_box->setLayout(radio_box_layout);
-	cpp_strategy_radio->setChecked(true);
+	m_strategy_box->setLayout(radio_box_layout);
+	m_cpp_strategy_radio->setChecked(true);
 
 	// buttons layout
 	auto buttons_layout { new QHBoxLayout{ this } };
@@ -50,7 +63,7 @@ void ControlWidget::init_layout() {
 
 	// insert control widgets into column
 	column->addLayout(buttons_layout);
-	column->addWidget(strategy_box);
+	column->addWidget(m_strategy_box);
 
 	// task / thread number control
 	auto task_number_layout { new QHBoxLayout{ this } };
@@ -70,27 +83,20 @@ void ControlWidget::init_layout() {
 	iterations_spinbox_layout->addWidget(m_iterations_number_spinbox);
 	column->addLayout(iterations_spinbox_layout);
 	column->addWidget(m_benchmark_from_image_btn);
-	column->addWidget(m_benchmark_from_generated_btn);
 
 	column->setMargin(16);
-
-	connect(cpp_strategy_radio, &QRadioButton::toggled, [=] {
-		emit calculation_policy_changed(( cpp_strategy_radio->isChecked() )
-			                                ? calculation_policy::cpp
-			                                : calculation_policy::assembly);
-	});
 }
 
-void ControlWidget::init_widgets() {
+void ControlWidget::_init_widgets() {
 	// buttons
 	this->load_image_btn = new QPushButton{ "Load image", this };
 	this->load_image_btn->setDefault(true);
 	this->generate_histogram_btn = new QPushButton{ "Calculate histogram", this };
 	this->generate_histogram_btn->setEnabled(false);
 
-	m_benchmark_from_image_btn = new QPushButton{ tr("Benchmark (use image)"), this };
+	m_benchmark_from_image_btn = new QPushButton{ tr("Run time performance test"), this };
 	m_benchmark_from_image_btn->setDisabled(true);
-	m_benchmark_from_generated_btn = new QPushButton{ tr("Benchmark (generate random)"), this };
+	//m_benchmark_from_generated_btn = new QPushButton{ tr("Benchmark (generate random)"), this };
 
 	// spinboxes
 	const char * spinbox_stylesheet { "QSpinBox { padding: 5px; }" };
@@ -113,7 +119,7 @@ void ControlWidget::init_widgets() {
 	m_number_of_tasks_spinbox->setStyleSheet(spinbox_stylesheet);
 }
 
-void ControlWidget::connect_signals() {
+void ControlWidget::_connect_signals() {
 
 	// button presses
 	connect(this->load_image_btn,
@@ -141,4 +147,13 @@ void ControlWidget::connect_signals() {
 	        SIGNAL(valueChanged(int)),
 	        this,
 	        SIGNAL(number_of_tasks_changed(int)));
+
+	connect(m_cpp_strategy_radio,
+	        &QRadioButton::toggled,
+	        [=] {
+		        emit calculation_policy_changed(( m_cpp_strategy_radio->isChecked() )
+			                                        ? calculation_policy::cpp
+			                                        : calculation_policy::assembly);
+	        }
+	);
 }

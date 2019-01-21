@@ -1,32 +1,63 @@
 #include "ImagePreviewWidget.hpp"
+#include <QApplication>
 
-#include <QLabel>
-#include <QVBoxLayout>
-#include <QResizeEvent>
-#include <QSizePolicy>
-
-ImagePreviewWidget::ImagePreviewWidget(QWidget* parent) : QWidget(parent), m_image_label{new QLabel{this}} {
-	m_layout = new QVBoxLayout{this};
-	setLayout(m_layout);
-	m_layout->addWidget(m_image_label);
-	m_layout->setAlignment(m_image_label, Qt::AlignCenter);
-	// m_layout->setSizeConstraint(QLayout::SetFixedSize);
-	m_image_label->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
+ImagePreviewWidget::ImagePreviewWidget(QWidget * parent)
+	: QLabel(parent) {
 }
 
-void ImagePreviewWidget::set_image(const QImage& image) {
-	m_image_pixmap = QPixmap::fromImage(image);
-	m_image_label->setPixmap(m_image_pixmap.scaledToHeight(200));
-	adjustSize();
-	// resize(m_image_label->pixmap()->size());
+void ImagePreviewWidget::set_image(const QImage & image) {
+	m_source_pixmap = QPixmap::fromImage(image);
+	setPixmap(m_source_pixmap);
 }
 
-void ImagePreviewWidget::clear_image() { m_image_label->clear(); }
+void ImagePreviewWidget::clear_image() {
+	clear();
+}
 
-void ImagePreviewWidget::resizeEvent(QResizeEvent* event) {
-	QWidget::resizeEvent(event);
-	if (m_image_pixmap.isNull()) { return; }
-	m_image_label->setPixmap(m_image_pixmap.scaled(event->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+void ImagePreviewWidget::paintEvent(QPaintEvent * aEvent) {
+	QLabel::paintEvent(aEvent);
+	_display_image();
+}
 
-	// m_image_label->setFixedSize(m_image_label->pixmap()->size());
+void ImagePreviewWidget::setPixmap(QPixmap aPicture) {
+	m_source_pixmap = m_current_pixmap = aPicture;
+	repaint();
+}
+
+QSize ImagePreviewWidget::minimumSizeHint() const {
+	return { 300, 200 };
+}
+
+void ImagePreviewWidget::_display_image() {
+
+	if (m_source_pixmap.isNull()) {
+		return;
+	}
+
+	const auto cw { static_cast<float>(width()) };
+	const auto ch { static_cast<float>(height()) };
+	const auto pw { static_cast<float>(m_current_pixmap.width()) };
+	const auto ph { static_cast<float>(m_current_pixmap.height()) };
+
+	if (pw > cw && ph > ch &&
+	    pw / cw > ph / ch || 
+	    pw > cw && ph <= ch || 
+	    pw < cw && ph < ch &&
+	    cw / pw < ch / ph 
+	) {
+		m_current_pixmap = m_source_pixmap.scaledToWidth(cw, Qt::TransformationMode::FastTransformation);
+	} else if (pw > cw && ph > ch &&
+	           pw / cw <= ph / ch ||
+	           ph > ch && pw <= cw || 
+	           pw < cw && ph < ch &&
+	           cw / pw > ch / ph 
+	) {
+		m_current_pixmap = m_source_pixmap.scaledToHeight(ch, Qt::TransformationMode::FastTransformation);
+	}
+
+	const auto x { static_cast<int>(( cw - m_current_pixmap.width() ) / 2) };
+	const auto y { static_cast<int>(( ch - m_current_pixmap.height() ) / 2) };
+
+	QPainter paint(this);
+	paint.drawPixmap(x, y, m_current_pixmap);
 }

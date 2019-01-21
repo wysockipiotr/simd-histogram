@@ -120,6 +120,7 @@
     <ClCompile Include="Ui\ControlWidget.cpp" />
     <ClCompile Include="Ui\HistogramsWidget.cpp" />
     <ClCompile Include="Ui\ImagePreviewWidget.cpp" />
+    <ClCompile Include="Ui\LogWidget.cpp" />
     <ClCompile Include="Ui\MainWindow.cpp" />
     <ClCompile Include="Utils\Cpuinfo.cpp" />
     <ClCompile Include="Utils\RuntimeDll.cpp" />
@@ -145,9 +146,7 @@
       <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles;.;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName)\.;$(QTDIR)\include\QtCharts;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtWidgets;.\Ui</IncludePath>
     </QtMoc>
     <QtMoc Include="Processing\ProcessingService.hpp" />
-    <ClInclude Include="Ui\ImageLabel.hpp" />
     <ClInclude Include="Utils\Cpuinfo.hpp" />
-    <ClInclude Include="Utils\QtForwardDeclarations.hpp" />
     <QtMoc Include="Ui\MainWindow.hpp" />
     <ClInclude Include="Utils\AlignedAllocator.hpp" />
     <ClInclude Include="Utils\RuntimeDll.hpp" />
